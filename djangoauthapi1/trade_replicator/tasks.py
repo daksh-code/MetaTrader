@@ -11,7 +11,7 @@ from django.core.cache import cache
 import time
 
 
-@shared_task
+@shared_task(bind=True,queue='replication_queue')
 def trade_replication(*args, **kwargs):
     thread_list = []
     res={}
@@ -20,7 +20,7 @@ def trade_replication(*args, **kwargs):
     if authtokens is None:
         authtokens = AuthToken.objects.filter(id__range=(0,35))
         cache.set('my_key', authtokens)
-
+        
     data = json.dumps({
     "orderStrategyType": "TRIGGER",
     "session": "NORMAL",
@@ -78,7 +78,7 @@ def trade_replication(*args, **kwargs):
         print(authtoken.api_account_number,"   API_ACCOUNT_NUMBER!!!!!!   ",  authtoken.api_access_token,"   API_ACCESS_TOKEN!!!!!")
         thread.start()
         thread_list.append(thread)
-    
+
     print(len(thread_list),"  THREAD_COUNT!!!!!!")
     # sending post request and saving response as response object
     #r = requests.post(url = API_ENDPOINT,data=data,headers=headers)
