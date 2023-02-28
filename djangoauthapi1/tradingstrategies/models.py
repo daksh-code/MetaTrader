@@ -22,7 +22,9 @@ class Strategy(models.Model):
         related_name='strategies'
     )
     quantity=models.IntegerField()
-    risk_to_reward_ratio = models.DecimalField(max_digits=3, decimal_places=2)
+    #max_stop_loss=models.DecimalField(null=True,max_digits=10, decimal_places=2)
+    max_stop_loss=models.FloatField(null=True)
+    risk_to_reward_ratio = models.FloatField()
     strategy_is_active = models.BooleanField(default=False)
 
 

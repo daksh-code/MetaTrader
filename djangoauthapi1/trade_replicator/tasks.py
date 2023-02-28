@@ -9,10 +9,12 @@ import requests
 from authTokens.models import AuthToken
 from django.core.cache import cache
 import time
+import copy
 
-
+quantity=None
 @shared_task(bind=True,queue='replication_queue')
-def trade_replication(*args, **kwargs):
+def trade_replication(place_order_data):
+    global quantity
     thread_list = []
     res={}
     que = queue.Queue()
@@ -20,61 +22,33 @@ def trade_replication(*args, **kwargs):
     if authtokens is None:
         authtokens = AuthToken.objects.filter(id__range=(0,35))
         cache.set('my_key', authtokens)
-        
-    data = json.dumps({
-    "orderStrategyType": "TRIGGER",
-    "session": "NORMAL",
-    "duration": "DAY",
-    "orderType": "LIMIT",
-    "price": 4,
-    "orderLegCollection": [{
-        "instruction": "BUY",
-        "quantity": 5,
-        "instrument": {
-            "assetType": "EQUITY",
-            "symbol": "AAPL"
-        }
-    }],
-    "childOrderStrategies": [{
-        "orderStrategyType": "OCO",
-        "childOrderStrategies": [{
-                "orderStrategyType": "SINGLE",
-                "session": "NORMAL",
-                "duration": "GOOD_TILL_CANCEL",
-                "orderType": "LIMIT",
-                "price": 2.00,
-                "orderLegCollection": [{
-                    "instruction": "SELL",
-                    "quantity": 1,
-                    "instrument": {
-                        "assetType": "EQUITY",
-                        "symbol": "AAPL"
-                    }
-                }]
-            },
-            {
-                "orderStrategyType": "SINGLE",
-                "session": "NORMAL",
-                "duration": "GOOD_TILL_CANCEL",
-                "orderType": "STOP",
-                "stopPrice": 11.27,
-                "orderLegCollection": [{
-                    "instruction": "SELL",
-                    "quantity": 5,
-                    "instrument": {
-                        "assetType": "EQUITY",
-                        "symbol": "AAPL"
-                    }
-                }]
-            }
-           ]
-        }]
-    })
+
     print(authtokens.count(),"COUNT!!!!!!")
+
+    json_data = json.loads(place_order_data)
+
+    def update_quantity(json_data, new_quantity):
+        if isinstance(json_data, dict):
+            for k, v in json_data.items():
+                if k == 'quantity':
+                    json_data[k] = int(round(json_data[k]*new_quantity))
+                elif isinstance(v, (dict, list)):
+                    update_quantity(v, new_quantity)
+        elif isinstance(json_data, list):
+            for item in json_data:
+                if isinstance(item, (dict, list)):
+                    update_quantity(item, new_quantity)
+                    
+        # Example usage
+        updated_json_str = json.dumps(json_data, indent=4)
+      
+        return updated_json_str
 
     start_time = time.time()
     for authtoken in authtokens:
-        thread = Thread(target = lambda q, arg1: q.put({arg1.user:requests.post(url = "https://api.tdameritrade.com/v1/accounts/{}/orders".format(arg1.api_account_number),data=data,headers={'Content-type': 'application/json' , 'Authorization': "Bearer {}".format(arg1.api_access_token)}).elapsed.total_seconds()}), args = (que,authtoken))
+        temp_data=copy.deepcopy(json_data)
+        updated_json_str=update_quantity(temp_data,authtoken.multiplier)  #pass by value json_data
+        thread = Thread(target = lambda q, arg1: q.put({arg1.user:requests.post(url = "https://api.tdameritrade.com/v1/accounts/{}/orders".format(arg1.api_account_number),data=updated_json_str,headers={'Content-type': 'application/json' , 'Authorization': "Bearer {}".format(arg1.api_access_token)}).elapsed.total_seconds()}), args = (que,authtoken))
         print(authtoken.api_account_number,"   API_ACCOUNT_NUMBER!!!!!!   ",  authtoken.api_access_token,"   API_ACCESS_TOKEN!!!!!")
         thread.start()
         thread_list.append(thread)

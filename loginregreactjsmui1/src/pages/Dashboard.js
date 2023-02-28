@@ -46,16 +46,7 @@ const Dashboard = () => {
 
   return <>
     <CssBaseline />
-    <Grid container>
-      <Grid item sm={4} sx={{ backgroundColor: '#106ca3', p: 1, color: 'white' }}>
-        <Typography variant='h5'>Email: {userData.email}</Typography>
-        <Typography variant='h6'>Name: {userData.name}</Typography>
-       
-      </Grid>
-      <Grid item sm={8}>
-         
-      </Grid>
-    </Grid>
+
   </>;
 };
 

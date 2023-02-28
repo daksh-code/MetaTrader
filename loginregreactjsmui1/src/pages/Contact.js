@@ -1,15 +1,61 @@
-import { Grid } from "@mui/material";
+import { useState } from 'react';
+import { TextField, Button, Grid,Typography,TextareaAutosize } from '@mui/material';
 
-const Contact = () => {
-  return <>
-    <Grid container justifyContent='center'>
-      <Grid item sm={10}>
-        <h1>Contact Page</h1>
-        <hr />
-        <p>Contact Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio earum officiis debitis vel tenetur quos animi vero voluptates reiciendis, omnis sed in libero temporibus deleniti pariatur expedita corporis officia. Odit enim, quasi facere magnam earum officiis ipsa aliquid impedit velit quibusdam dolor ex esse ratione explicabo quod, culpa temporibus? Dolorem deleniti doloremque maxime quas deserunt. Ex aspernatur saepe illo eaque corrupti placeat, aperiam nulla adipisci itaque quos necessitatibus iure at minus non delectus ratione quod ad. Alias dolore perferendis est expedita iure! Nostrum laborum tempore amet commodi voluptas accusamus enim repudiandae, quia odio cumque, laboriosam architecto illo! Aliquid, fuga quis.</p>
-      </Grid>
-    </Grid>
-  </>;
-};
+function Contact() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Message:', message);
+  };
+
+  return (
+    <div className="App" style={{textAlign:"center"}}>
+          
+    
+    <Typography variant="h5">Contact Us</Typography>
+    <form>
+
+      <TextField
+        style={{ width: "200px", margin: "5px" }}
+        type="text"
+        label="Name"
+        variant="outlined"
+      />
+      <br />
+      <TextField
+        style={{ width: "200px", margin: "5px" }}
+        type="text"
+        label="Email"
+        variant="outlined"
+      />
+      <br />
+      <TextareaAutosize
+        required
+        aria-label="minimum height"
+        minRows={8}
+        placeholder="Message"
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        sx={{
+          width: "100%",
+          padding: "10px",
+          borderRadius: "5px",
+          border: "1px solid gray",
+          marginBottom: "10px",
+        }}
+      />
+      <br />
+      <Button variant="contained" color="primary">
+        save
+      </Button>
+    </form>
+  </div>
+  );
+}
 
 export default Contact;

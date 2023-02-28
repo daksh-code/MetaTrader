@@ -10,7 +10,7 @@ class AuthToken(models.Model):
     api_refresh_token = models.CharField(max_length=2000)
     api_consumer_key= models.CharField(max_length=1000)
     api_account_number=models.CharField(max_length=100)
-
+    multiplier = models.FloatField(default=1.0)
 @receiver(post_save, sender=User)
 def create_user_auth_token(sender, instance, created, **kwargs):
     if created:

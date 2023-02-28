@@ -4,9 +4,9 @@ const Home = () => {
   return <>
     <Grid container justifyContent='center'>
       <Grid item sm={10}>
-        <h1>Home Page</h1>
+        <h1>Shalom!!!!</h1>
         <hr />
-        <p>Home Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio earum officiis debitis vel tenetur quos animi vero voluptates reiciendis, omnis sed in libero temporibus deleniti pariatur expedita corporis officia. Odit enim, quasi facere magnam earum officiis ipsa aliquid impedit velit quibusdam dolor ex esse ratione explicabo quod, culpa temporibus? Dolorem deleniti doloremque maxime quas deserunt. Ex aspernatur saepe illo eaque corrupti placeat, aperiam nulla adipisci itaque quos necessitatibus iure at minus non delectus ratione quod ad. Alias dolore perferendis est expedita iure! Nostrum laborum tempore amet commodi voluptas accusamus enim repudiandae, quia odio cumque, laboriosam architecto illo! Aliquid, fuga quis.</p>
+        <p>Welcome to MetaTrader, the platform that allows you to replicate trades from master trdaers to your TD Ameritrade account automatically. By signing up for our paid subscription, you can enter your TD Ameritrade credentials and our system will automatically replicate your trades. No need to manually enter trades, we take care of it for you. Sign up now and start replicating your trades with ease.</p>
       </Grid>
     </Grid>
   </>;
@@ -14,4 +14,3 @@ const Home = () => {
 
 export default Home;
 
-'https://auth.tdameritrade.com/v1/oauth2/token?response_type=code&redirect_uri=https%3A%2F%2F127.0.0.1%3A8080&client_id=JYTPOVQ6VJJSLVOO3JA5KHUUEWC6OBDG'

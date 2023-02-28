@@ -19,7 +19,8 @@ const UserAuthToken=() =>{
         api_access_token:data.get('Access_Token'),
         api_refresh_token: data.get('Refresh_Token'),
         api_consumer_key: data.get('Consumer_Key'),
-        api_account_number: data.get('Account_Number')
+        api_account_number: data.get('Account_Number'),
+        multiplier: parseFloat(data.get('multiplier'))
         }
         console.log(actualData)
         console.log(access_token)
@@ -38,7 +39,7 @@ const UserAuthToken=() =>{
         }
     }
   return (
-        <div className="App" style={{textAlign:"center"}}>
+       <div className="App" style={{textAlign:"center"}}> 
           <Typography variant="h5">AmeriTrade Tokens Details</Typography>
           <Box component='form' noValidate sx={{ mt: 1 }} id='auth-token-form' onSubmit={handleSubmit}>
             <TextField
@@ -56,6 +57,7 @@ const UserAuthToken=() =>{
               variant="outlined"
               name="Access_Token"
             />
+            <br />
             <TextField
               style={{ width: "200px", margin: "5px" }}
               type="text"
@@ -63,6 +65,7 @@ const UserAuthToken=() =>{
               variant="outlined"
               name="Consumer_Key"
             />
+            <br />
             <TextField
               style={{ width: "200px", margin: "5px" }}
               type="text"
@@ -70,6 +73,15 @@ const UserAuthToken=() =>{
               variant="outlined"
               name="Account_Number"
             />
+            <br />
+            <TextField
+              style={{ width: "200px", margin: "5px" }}
+              type="text"
+              label="Multiplier"
+              variant="outlined"
+              name="multiplier"
+            />
+            <br />
             <Button type ="submit" variant="contained" color="primary">
               save
             </Button>
