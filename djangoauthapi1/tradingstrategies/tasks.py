@@ -285,11 +285,8 @@ def strategy_1(*args, **kwargs):
         print("Strategy_1 is not active")
         pass
             # ends
-        # Always add handlers before subscribing because many streams start sending
-        # data immediately after success, and messages with no handlers are dropped.
+      
            
-    
-
 
 @shared_task(name="strategy_2",queue='strategy_2_queue')
 def strategy_2():
